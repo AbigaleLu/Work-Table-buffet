@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>自选电镜机时表</title>
+<style>
+  :root{
+    --Spectra300: #d08c90;
+    --hf5000: #8eaacb;
+    --f20: #b7b7b7;
+    --rest: #f4e8a9;
+    --today: #deefdf;
+  }
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,"Noto Sans CJK SC",sans-serif;margin:0;background:#fafafa;color:#111;}
+  header{position:sticky;top:0;background:#fff;border-bottom:1px solid #eee;z-index:10}
+  .toolbar{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 12px;flex-wrap:wrap}
+  .title{font-weight:700}
+  .seg{display:inline-flex;border:1px solid #ddd;border-radius:12px;overflow:hidden}
+  .seg button{border:0;padding:8px 12px;background:#fff;cursor:pointer;font-weight:600}
+  .seg button.active{background:#111;color:#fff}
+  select, .btn{padding:8px 10px;border:1px solid #ddd;border-radius:10px;background:#fff;cursor:pointer}
+  .legend{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);font-size:13px}
+  .dot{width:10px;height:10px;border-radius:50%}
+  .container{max-width:980px;margin:16px auto;padding:0 12px}
+  .month{display:none;background:#fff;border-radius:16px;box-shadow:0 6px 20px rgba(0,0,0,.08);padding:16px;touch-action:pan-y}
+  .month.active{display:block}
+  .month h2{margin:0 0 8px 0;font-size:18px;font-weight:700;text-align:center}
+  .grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+  .dow{font-size:12px;font-weight:600;text-align:center;color:#666;padding:6px 0}
+  .day{background:#f7f7f8;border-radius:12px;min-height:96px;padding:8px;display:flex;flex-direction:column;transition:transform .12s ease, background .2s ease}
+  .day .num{font-size:12px;color:#666;margin-bottom:6px}
+  .day.other{opacity:.35}
+  .day.today{background:var(--today); box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);}
+  .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+  .badge{font-size:12px;font-weight:700;line-height:1;padding:6px 8px;border-radius:10px;color:#111}
+  .badge.sp{background:var(--Spectra300);}
+  .badge.hf{background:var(--hf5000);}
+  .badge.f20{background:var(--f20);}
+  .badge.rest{background:var(--rest);}
+  .btn-today{font-weight:700}
+</style>
+</head>
+<body>
+<header>
+  <div class="toolbar">
+    <span class="title">自选电镜机时表</span>
+    <div class="seg" id="monthSeg">
+      <button data-target="2025-09" class="active">2025-09</button>
+      <button data-target="2025-10">2025-10</button>
+      <button data-target="2025-11">2025-11</button>
+      <button data-target="2025-12">2025-12</button>
+    </div>
+    <select id="filter">
+      <option value="ALL">全部</option>
+      <option value="Spectra300">只看 Spectra300</option>
+      <option value="Hf5000">只看 Hf5000</option>
+      <option value="F20">只看 F20</option>
+    </select>
+    <button class="btn btn-today" id="goToday">回到今天</button>
+    <div class="legend">
+      <span class="chip"><span class="dot" style="background:var(--Spectra300)"></span>Spectra300</span>
+      <span class="chip"><span class="dot" style="background:var(--hf5000)"></span>Hf5000</span>
+      <span class="chip"><span class="dot" style="background:var(--f20)"></span>F20</span>
+      <span class="chip"><span class="dot" style="background:var(--rest)"></span>嘿嘿休息</span>
+    </div>
+  </div>
+</header>
+<div class="container">
+<section class="month" data-year="2025" data-month="09"><h2>2025年 09月</h2><div class="grid"><div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div><div class="dow">Sun</div><div class="day" data-date="2025-09-01"><div class="num">1</div></div><div class="day" data-date="2025-09-02"><div class="num">2</div></div><div class="day" data-date="2025-09-03"><div class="num">3</div></div><div class="day" data-date="2025-09-04"><div class="num">4</div></div><div class="day" data-date="2025-09-05"><div class="num">5</div></div><div class="day" data-date="2025-09-06"><div class="num">6</div></div><div class="day" data-date="2025-09-07"><div class="num">7</div></div><div class="day" data-date="2025-09-08"><div class="num">8</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-09-09"><div class="num">9</div></div><div class="day" data-date="2025-09-10"><div class="num">10</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-09-11"><div class="num">11</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span></div></div><div class="day" data-date="2025-09-12"><div class="num">12</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-09-13"><div class="num">13</div></div><div class="day" data-date="2025-09-14"><div class="num">14</div></div><div class="day" data-date="2025-09-15"><div class="num">15</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-09-16"><div class="num">16</div></div><div class="day" data-date="2025-09-17"><div class="num">17</div><div class="badges"><span class="badge rest" data-tag="Spectra300Rest">嘿嘿休息</span></div></div><div class="day" data-date="2025-09-18"><div class="num">18</div></div><div class="day" data-date="2025-09-19"><div class="num">19</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-09-20"><div class="num">20</div></div><div class="day" data-date="2025-09-21"><div class="num">21</div></div><div class="day" data-date="2025-09-22"><div class="num">22</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-09-23"><div class="num">23</div></div><div class="day" data-date="2025-09-24"><div class="num">24</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-09-25"><div class="num">25</div></div><div class="day" data-date="2025-09-26"><div class="num">26</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-09-27"><div class="num">27</div></div><div class="day" data-date="2025-09-28"><div class="num">28</div></div><div class="day" data-date="2025-09-29"><div class="num">29</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-09-30"><div class="num">30</div></div><div class="day other" data-date="2025-10-01"><div class="num">1</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day other" data-date="2025-10-02"><div class="num">2</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span></div></div><div class="day other" data-date="2025-10-03"><div class="num">3</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day other" data-date="2025-10-04"><div class="num">4</div></div><div class="day other" data-date="2025-10-05"><div class="num">5</div></div></div></section><section class="month" data-year="2025" data-month="10"><h2>2025年 10月</h2><div class="grid"><div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div><div class="dow">Sun</div><div class="day other" data-date="2025-09-29"><div class="num">29</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day other" data-date="2025-09-30"><div class="num">30</div></div><div class="day" data-date="2025-10-01"><div class="num">1</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-10-02"><div class="num">2</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span></div></div><div class="day" data-date="2025-10-03"><div class="num">3</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-10-04"><div class="num">4</div></div><div class="day" data-date="2025-10-05"><div class="num">5</div></div><div class="day" data-date="2025-10-06"><div class="num">6</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-10-07"><div class="num">7</div></div><div class="day" data-date="2025-10-08"><div class="num">8</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-10-09"><div class="num">9</div></div><div class="day" data-date="2025-10-10"><div class="num">10</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-10-11"><div class="num">11</div></div><div class="day" data-date="2025-10-12"><div class="num">12</div></div><div class="day" data-date="2025-10-13"><div class="num">13</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-10-14"><div class="num">14</div></div><div class="day" data-date="2025-10-15"><div class="num">15</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-10-16"><div class="num">16</div></div><div class="day" data-date="2025-10-17"><div class="num">17</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-10-18"><div class="num">18</div></div><div class="day" data-date="2025-10-19"><div class="num">19</div></div><div class="day" data-date="2025-10-20"><div class="num">20</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-10-21"><div class="num">21</div></div><div class="day" data-date="2025-10-22"><div class="num">22</div><div class="badges"><span class="badge rest" data-tag="Spectra300Rest">嘿嘿休息</span></div></div><div class="day" data-date="2025-10-23"><div class="num">23</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span></div></div><div class="day" data-date="2025-10-24"><div class="num">24</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-10-25"><div class="num">25</div></div><div class="day" data-date="2025-10-26"><div class="num">26</div></div><div class="day" data-date="2025-10-27"><div class="num">27</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-10-28"><div class="num">28</div></div><div class="day" data-date="2025-10-29"><div class="num">29</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-10-30"><div class="num">30</div></div><div class="day" data-date="2025-10-31"><div class="num">31</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day other" data-date="2025-11-01"><div class="num">1</div></div><div class="day other" data-date="2025-11-02"><div class="num">2</div></div></div></section><section class="month" data-year="2025" data-month="11"><h2>2025年 11月</h2><div class="grid"><div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div><div class="dow">Sun</div><div class="day other" data-date="2025-10-27"><div class="num">27</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day other" data-date="2025-10-28"><div class="num">28</div></div><div class="day other" data-date="2025-10-29"><div class="num">29</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day other" data-date="2025-10-30"><div class="num">30</div></div><div class="day other" data-date="2025-10-31"><div class="num">31</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-11-01"><div class="num">1</div></div><div class="day" data-date="2025-11-02"><div class="num">2</div></div><div class="day" data-date="2025-11-03"><div class="num">3</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-11-04"><div class="num">4</div></div><div class="day" data-date="2025-11-05"><div class="num">5</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-11-06"><div class="num">6</div></div><div class="day" data-date="2025-11-07"><div class="num">7</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-11-08"><div class="num">8</div></div><div class="day" data-date="2025-11-09"><div class="num">9</div></div><div class="day" data-date="2025-11-10"><div class="num">10</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-11-11"><div class="num">11</div></div><div class="day" data-date="2025-11-12"><div class="num">12</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-11-13"><div class="num">13</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span></div></div><div class="day" data-date="2025-11-14"><div class="num">14</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-11-15"><div class="num">15</div></div><div class="day" data-date="2025-11-16"><div class="num">16</div></div><div class="day" data-date="2025-11-17"><div class="num">17</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-11-18"><div class="num">18</div></div><div class="day" data-date="2025-11-19"><div class="num">19</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-11-20"><div class="num">20</div></div><div class="day" data-date="2025-11-21"><div class="num">21</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-11-22"><div class="num">22</div></div><div class="day" data-date="2025-11-23"><div class="num">23</div></div><div class="day" data-date="2025-11-24"><div class="num">24</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-11-25"><div class="num">25</div></div><div class="day" data-date="2025-11-26"><div class="num">26</div><div class="badges"><span class="badge rest" data-tag="Spectra300Rest">嘿嘿休息</span></div></div><div class="day" data-date="2025-11-27"><div class="num">27</div></div><div class="day" data-date="2025-11-28"><div class="num">28</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-11-29"><div class="num">29</div></div><div class="day" data-date="2025-11-30"><div class="num">30</div></div></div></section><section class="month" data-year="2025" data-month="12"><h2>2025年 12月</h2><div class="grid"><div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div><div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div><div class="dow">Sun</div><div class="day" data-date="2025-12-01"><div class="num">1</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-12-02"><div class="num">2</div></div><div class="day" data-date="2025-12-03"><div class="num">3</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-12-04"><div class="num">4</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span></div></div><div class="day" data-date="2025-12-05"><div class="num">5</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-12-06"><div class="num">6</div></div><div class="day" data-date="2025-12-07"><div class="num">7</div></div><div class="day" data-date="2025-12-08"><div class="num">8</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-12-09"><div class="num">9</div></div><div class="day" data-date="2025-12-10"><div class="num">10</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-12-11"><div class="num">11</div></div><div class="day" data-date="2025-12-12"><div class="num">12</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-12-13"><div class="num">13</div></div><div class="day" data-date="2025-12-14"><div class="num">14</div></div><div class="day" data-date="2025-12-15"><div class="num">15</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-12-16"><div class="num">16</div></div><div class="day" data-date="2025-12-17"><div class="num">17</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-12-18"><div class="num">18</div></div><div class="day" data-date="2025-12-19"><div class="num">19</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-12-20"><div class="num">20</div></div><div class="day" data-date="2025-12-21"><div class="num">21</div></div><div class="day" data-date="2025-12-22"><div class="num">22</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-12-23"><div class="num">23</div></div><div class="day" data-date="2025-12-24"><div class="num">24</div><div class="badges"><span class="badge sp" data-tag="Spectra300">Spectra300</span></div></div><div class="day" data-date="2025-12-25"><div class="num">25</div><div class="badges"><span class="badge hf" data-tag="Hf5000">Hf5000</span></div></div><div class="day" data-date="2025-12-26"><div class="num">26</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-12-27"><div class="num">27</div></div><div class="day" data-date="2025-12-28"><div class="num">28</div></div><div class="day" data-date="2025-12-29"><div class="num">29</div><div class="badges"><span class="badge f20" data-tag="F20">F20</span></div></div><div class="day" data-date="2025-12-30"><div class="num">30</div></div><div class="day" data-date="2025-12-31"><div class="num">31</div><div class="badges"><span class="badge rest" data-tag="Spectra300Rest">嘿嘿休息</span></div></div><div class="day other" data-date="2026-01-01"><div class="num">1</div></div><div class="day other" data-date="2026-01-02"><div class="num">2</div></div><div class="day other" data-date="2026-01-03"><div class="num">3</div></div><div class="day other" data-date="2026-01-04"><div class="num">4</div></div></div></section>
+</div>
+<script>
+/* ========= 参数化机时日历 v2：修正 Hf5000 相位 & 新增 Spectra300 工作日 =========
+   变量：
+   a: 6周循环：当前周是第 a 周(1..6)
+   b: Spectra300 在 6周循环中第 b 周休息(1..6)
+   s: Spectra300 的工作日(1..7=Mon..Sun) —— 新增
+   c: Hf5000 的三周循环锚点，定义为“当前这一周就是第 c 周”(1..3)
+   e: Hf5000 固定搭配：'MT' = Mon/Thu，'WT' = Wed/Tue
+   d: F20 每周工作日，逗号分隔(如 "1,5" 表示 Mon & Fri)
+
+   周一为一周起点；“今天所在周”为锚点向前后推算相位。
+   外观、筛选与交互保持不变。
+*/
+
+const COLORS = {
+  Spectra300: getComputedStyle(document.documentElement).getPropertyValue('--Spectra300').trim() || '#d08c90',
+  Hf5000:     getComputedStyle(document.documentElement).getPropertyValue('--hf5000').trim()     || '#8eaacb',
+  F20:        getComputedStyle(document.documentElement).getPropertyValue('--f20').trim()        || '#b7b7b7',
+  Rest:       getComputedStyle(document.documentElement).getPropertyValue('--rest').trim()       || '#f4e8a9',
+};
+
+// ======== 工具栏加入“规则设置”按钮 ========
+(function injectRuleButton(){
+  const tb = document.querySelector('.toolbar');
+  if(!tb || document.getElementById('ruleBtn')) return;
+  const btn = document.createElement('button');
+  btn.className = 'btn'; btn.id = 'ruleBtn';
+  btn.textContent = '规则设置';
+  tb.insertBefore(btn, tb.querySelector('.legend')); // 放在图例前
+})();
+
+// ======== 默认变量（可被本地存储覆盖）========
+const DEFAULTS = { a:1, b:3, s:3, c:1, e:'MT', d:'1,5' }; // s=3 默认周三
+
+function loadVars(){
+  try{
+    const raw = localStorage.getItem('ems-vars');
+    if(!raw) return {...DEFAULTS};
+    const obj = JSON.parse(raw);
+    return {...DEFAULTS, ...obj};
+  }catch{ return {...DEFAULTS}; }
+}
+function saveVars(v){ localStorage.setItem('ems-vars', JSON.stringify(v)); }
+
+// 规则设置弹窗：输入 a b s c d e（顺序更新）
+function openRulePrompt(){
+  const cur = loadVars();
+  const msg = [
+    '请输入六个变量，用空格分隔：a b s c d e（MT/WT）',
+    '本周是第a周 Spectra300第b周休息 周s做Spectra300',
+    '周c做Hf5000 周d做F20（不做填0） e（周一周四还是周三周二）',
+    '示例：2 3 3 1 1,5 MT'
+  ].join('\n');
+  const val = prompt(msg, `${cur.a} ${cur.b} ${cur.s} ${cur.c} ${cur.d} ${cur.e}`);
+  if(!val) return;
+  const parts = val.split(/[,\s]+/).filter(Boolean);
+  if(parts.length < 6){ alert('格式不正确，请按 “a b s c d e” 输入。'); return; }
+
+  const a = clampInt(parts[0], 1, 6);
+  const b = clampInt(parts[1], 1, 6);
+  const s = clampInt(parts[2], 1, 7);                        // 新增 Spectra 工作日
+  const c = clampInt(parts[3], 1, 3);
+  const e = (parts[parts.length-1].toUpperCase()==='WT') ? 'WT' : 'MT';
+  const d = parts.slice(4, parts.length-1).join(',');        // 中间段合并为 d
+
+  const vars = { a, b, s, c, d, e };
+  saveVars(vars);
+  rebuildAll(vars);
+}
+document.getElementById('ruleBtn')?.addEventListener('click', openRulePrompt);
+
+// ======== 基础日历构建（外观与原版一致）========
+const seg       = document.getElementById('monthSeg');
+const filterSel = document.getElementById('filter');
+const todayBtn  = document.getElementById('goToday');
+const container = document.querySelector('.container');
+
+const MONTHS = [
+  {y:2025, m:9}, {y:2025, m:10}, {y:2025, m:11}, {y:2025, m:12}
+];
+
+function startOfWeek(d){ // 周一为起始
+  const x = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  let wd = x.getDay(); // 0..6, Sun..Sat
+  wd = (wd===0)?7:wd;  // 1..7, Mon..Sun
+  x.setDate(x.getDate() - (wd-1));
+  x.setHours(0,0,0,0);
+  return x;
+}
+function addDays(d,n){ const x=new Date(d); x.setDate(x.getDate()+n); return x; }
+function isoDate(y,m,d){ return `${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`; }
+function clampInt(v,min,max){ v = parseInt(v,10); if(isNaN(v)) v=min; return Math.max(min, Math.min(max, v)); }
+
+function buildMonthSection(y,m){
+  const section = document.createElement('section');
+  section.className = 'month';
+  section.dataset.year = y;
+  section.dataset.month = String(m).padStart(2,'0');
+  section.innerHTML = `<h2>${y}年 ${String(m).padStart(2,'0')}月</h2>
+    <div class="grid">
+      <div class="dow">Mon</div><div class="dow">Tue</div><div class="dow">Wed</div>
+      <div class="dow">Thu</div><div class="dow">Fri</div><div class="dow">Sat</div><div class="dow">Sun</div>
+    </div>`;
+  const grid = section.querySelector('.grid');
+
+  const first = new Date(y, m-1, 1);
+  const last  = new Date(y, m, 0);
+  const from = startOfWeek(first);
+  const to   = addDays(startOfWeek(addDays(last, 6)), 6);
+
+  for(let d=new Date(from); d<=to; d=addDays(d,1)){
+    const inMonth = (d.getMonth() === (m-1));
+    const cell = document.createElement('div');
+    cell.className = 'day' + (inMonth ? '' : ' other');
+    cell.dataset.date = isoDate(d.getFullYear(), d.getMonth()+1, d.getDate());
+    cell.innerHTML = `<div class="num">${d.getDate()}</div><div class="badges"></div>`;
+    section.querySelector('.grid').appendChild(cell);
+  }
+  return section;
+}
+function clearAndBuildMonths(){
+  container.innerHTML = '';
+  MONTHS.forEach(({y,m})=> container.appendChild(buildMonthSection(y,m)));
+}
+function buildSegButtons(){
+  if(!seg) return;
+  seg.innerHTML = '';
+  MONTHS.forEach(({y,m},i)=>{
+    const b = document.createElement('button');
+    b.dataset.target = `${y}-${String(m).padStart(2,'0')}`;
+    b.textContent = `${y}-${String(m).padStart(2,'0')}`;
+    if(i===0) b.classList.add('active');
+    seg.appendChild(b);
+  });
+}
+function showMonth(key){
+  const sections = [...document.querySelectorAll('.month')];
+  sections.forEach(sec=>sec.classList.toggle('active', `${sec.dataset.year}-${sec.dataset.month}`===key));
+  [...seg.querySelectorAll('button')].forEach(b=>b.classList.toggle('active', b.dataset.target===key));
+  applyFilter(); highlightToday();
+}
+seg.addEventListener('click', e=>{
+  const btn = e.target.closest('button'); if(!btn) return; showMonth(btn.dataset.target);
+});
+window.addEventListener('keydown', e=>{
+  if(e.key!=='ArrowLeft' && e.key!=='ArrowRight') return;
+  const sections = [...document.querySelectorAll('.month')];
+  const order = sections.map(sec => `${sec.dataset.year}-${sec.dataset.month}`);
+  const idx = order.indexOf(order.find(k=>document.querySelector(`.month[data-year="${k.split('-')[0]}"][data-month="${k.split('-')[1]}"]`).classList.contains('active')));
+  const next = (e.key==='ArrowRight') ? Math.min(order.length-1, idx+1) : Math.max(0, idx-1);
+  showMonth(order[next]);
+});
+
+// 用这个完整函数替换你脚本里的 addBadge
+function addBadge(dateISO, tag, label){
+  const nodes = document.querySelectorAll(`.day[data-date="${dateISO}"] .badges`);
+  if(!nodes || nodes.length === 0) return;
+
+  nodes.forEach((el) => {
+    const span = document.createElement('span');
+    span.className = 'badge ' + (
+      tag === 'Spectra300' ? 'sp' :
+      tag === 'Hf5000'    ? 'hf' :
+      tag === 'F20'       ? 'f20' : 'rest'
+    );
+    // 便于过滤：“休息周”仍归在 Spectra300 类别下
+    span.dataset.tag = (tag === 'Rest' ? 'Spectra300' : tag);
+    span.textContent = label;
+    el.appendChild(span);
+  });
+}
+
+function generateSchedule(vars){
+  const {a,b,s,c,d,e} = vars;
+
+  // —— F20 开关：d 为 '0' 或空白时，F20 完全不渲染 ——
+  const dTrim = (d ?? '').toString().trim();
+  const f20Enabled = dTrim !== '' && dTrim !== '0';
+  const f20Days = f20Enabled
+    ? dTrim.split(/[,\s]+/).filter(Boolean)
+        .map(x => parseInt(x, 10))
+        .filter(n => n >= 1 && n <= 7)   // 只保留 1..7（Mon..Sun）
+    : [];
+
+  const today = new Date();
+  today.setHours(0,0,0,0); // 去掉时分秒，只比较日期
+
+  const thisWeekMon = startOfWeek(today);
+
+  const from = new Date(2025,8,1);   // 2025-09-01
+  const to   = new Date(2025,11,31); // 2025-12-31
+
+  for (let weekMon = startOfWeek(from); weekMon <= to; weekMon = addDays(weekMon, 7)) {
+    const weekIdxDelta = Math.round((weekMon - thisWeekMon) / (7*24*3600*1000));
+
+    // ===== 6周循环相位（1..6），当前周对齐为第 a 周 =====
+    const cyc6 = (((weekIdxDelta % 6) + 6) % 6) + 1;
+    const shift6 = a - 1;
+    const cyc6Aligned = ((((cyc6 - 1 + shift6) % 6) + 6) % 6) + 1;
+
+    // ===== Spectra300（s=工作日，b=休息周）=====
+    const spDay = addDays(weekMon, s - 1); // s:1..7 => Mon..Sun
+    if (spDay >= from && spDay <= to && spDay >= today) {
+      const spISO = isoDate(spDay.getFullYear(), spDay.getMonth()+1, spDay.getDate());
+      if (cyc6Aligned === b) {
+        addBadge(spISO, 'Rest', '嘿嘿休息');
+      } else {
+        addBadge(spISO, 'Spectra300', 'Spectra300');
+      }
+    }
+
+    // ===== Hf5000（三周循环：c周/ c+1周 / c+2休）=====
+    const phase3 = (((weekIdxDelta + (c - 1)) % 3) + 3) % 3; // 0=c周,1=c+1,2=休
+    let hfOffset = null;
+    if (e === 'WT') {        // c周=Wed(2), c+1周=Tue(1), c+2周=休
+      hfOffset = (phase3 === 0) ? 2 : (phase3 === 1) ? 1 : null; // Mon=0
+    } else {                 // MT：c周=Mon(0), c+1周=Thu(3), c+2周=休
+      hfOffset = (phase3 === 0) ? 0 : (phase3 === 1) ? 3 : null;
+    }
+    if (hfOffset !== null) {
+      const hfDate = addDays(weekMon, hfOffset);
+      if (hfDate >= from && hfDate <= to && hfDate >= today) {
+        const iso = isoDate(hfDate.getFullYear(), hfDate.getMonth()+1, hfDate.getDate());
+        addBadge(iso, 'Hf5000', 'Hf5000');
+      }
+    }
+
+    // ===== F20（仅在启用时渲染）=====
+    if (f20Enabled && f20Days.length > 0) {
+      f20Days.forEach(wd => {
+        const f20Date = addDays(weekMon, wd - 1);
+        if (f20Date >= from && f20Date <= to && f20Date >= today) {
+          const iso = isoDate(f20Date.getFullYear(), f20Date.getMonth()+1, f20Date.getDate());
+          addBadge(iso, 'F20', 'F20');
+        }
+      });
+    }
+  }
+}
+
+// ======== 过滤 / 今天 / 回到今天 ========
+filterSel.addEventListener('change', applyFilter);
+function applyFilter(){
+  const mode = filterSel.value;
+  const active = document.querySelector('.month.active');
+  if(!active) return;
+  active.querySelectorAll('.day').forEach(day=>{
+    day.style.display = '';
+    day.querySelectorAll('.badge').forEach(b=> b.style.display='');
+    if(mode==='ALL') return;
+    day.querySelectorAll('.badge').forEach(b=>{
+      const tag = b.getAttribute('data-tag');
+      if(tag === 'Spectra300Rest'){
+        b.style.display = (mode==='Spectra300') ? '' : 'none';
+      }else if(tag !== mode){
+        b.style.display = 'none';
+      }
+    });
+    const visible = [...day.querySelectorAll('.badge')].some(b=>b.style.display!=='none');
+    day.style.display = visible ? '' : 'none';
+  });
+}
+function highlightToday(){
+  const today = new Date();
+  const iso = isoDate(today.getFullYear(), today.getMonth()+1, today.getDate());
+  document.querySelectorAll('.day').forEach(day=>day.classList.remove('today'));
+  document.querySelectorAll(`.day[data-date="${iso}"]`).forEach(day=>day.classList.add('today'));
+}
+todayBtn.addEventListener('click', ()=>{
+  const now = new Date();
+  const key = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+  const sections = [...document.querySelectorAll('.month')];
+  const order = sections.map(sec => `${sec.dataset.year}-${sec.dataset.month}`);
+  if(order.includes(key)) showMonth(key);
+  const target = document.querySelector(`.day[data-date="${isoDate(now.getFullYear(),now.getMonth()+1,now.getDate())}"]`);
+  if(target){ target.scrollIntoView({behavior:'smooth', block:'center'}); if(navigator.vibrate){ navigator.vibrate([8,30,8]); } }
+});
+
+// ======== 初始化 ========
+function rebuildAll(vars){
+  clearAndBuildMonths();
+  buildSegButtons();
+  showMonth(`${MONTHS[0].y}-${String(MONTHS[0].m).padStart(2,'0')}`);
+  generateSchedule(vars);
+  applyFilter();
+  highlightToday();
+}
+const INIT_VARS = loadVars();
+rebuildAll(INIT_VARS);
+</script>
+
+</body>
+</html>
