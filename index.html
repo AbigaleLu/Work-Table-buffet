@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>自选电镜机时表 · 合并V2</title>
+<title>自选电镜机时日历 · V2</title>
 <style>
 
   :root{
@@ -37,10 +37,10 @@
   .day.today{background:var(--today); box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);}
   .badges{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
   .badge{font-size:12px;font-weight:700;line-height:1;padding:6px 8px;border-radius:10px;color:#111}
-  .badge.sp{background:var(--Spectra300);}
-  .badge.hf{background:var(--hf5000);}
-  .badge.f20{background:var(--f20);}
-  .badge.rest{background:var(--rest);}
+  .badge.sp{background:var(--Spectra300);color:#fbfbfb;}
+  .badge.hf{background:var(--hf5000);color:#fbfbfb;}
+  .badge.f20{background:var(--f20);color:#fbfbfb;}
+  .badge.rest{background:var(--rest);color:#303030;}
   .btn-today{font-weight:700}
 
 
@@ -49,8 +49,15 @@
 .dropdown-menu{display:none;position:absolute;right:0;top:42px;background:#fff;min-width:280px;border:1px solid #eee;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:12px;z-index:1000}
 .dropdown-menu.open{display:block}
 .dropdown-menu label{font-weight:700;font-size:14px;margin-bottom:6px;display:block}
-.dropdown-menu .row{display:flex;align-items:center;gap:8px;margin:6px 0}
-.dropdown-menu select,.dropdown-menu input{padding:6px 8px;border:1px solid #ddd;border-radius:8px;background:#f7f7f8;font-size:14px}
+.dropdown-menu .row{display:flex;align-items:center;gap:8px;margin:6px 0;font-size:12px}
+.dropdown-menu select,.dropdown-menu input{
+  padding:6px 8px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  background:#f7f7f8;
+  font-size:12px;
+  max-width: 103px; /* 新增样式：限制输入框的最大宽度 */
+}
 .dropdown-menu hr{border:0;border-top:1px solid #eee;margin:10px 0}
 #save-rules{width:100%;font-weight:800}
 
@@ -63,10 +70,10 @@
 
 <header>
   <div class="toolbar">
-    <span class="title">机时日历 · 规则驱动</span>
+    <span class="title">自选电镜机时日历</span>
     <div class="seg" id="monthSeg"></div>
     <select id="filter">
-      <option value="ALL">全部</option>
+      <option value="ALL">全部机台</option>
       <option value="Spectra300">只看 Spectra300</option>
       <option value="Hf5000">只看 Hf5000</option>
       <option value="F20">只看 F20</option>
@@ -83,19 +90,19 @@
       <button class="btn" id="ruleBtn">规则设置</button>
       <div class="dropdown-menu" id="ruleMenu">
         <label>Spectra300（6周循环）</label>
-        <div class="row">当前相位：第
+        <div class="row">当前是：第
           <select id="select-a"></select> 周
         </div>
         <div class="row">休息周：第
           <select id="select-b"></select> 周
         </div>
-        <div class="row">工作日：
+        <div class="row">工作日：周
           <select id="select-s"></select>
         </div>
         <hr>
-        <label>Hf5000（三周循环）</label>
-        <div class="row">当前相位：第
-          <select id="select-c"></select> 周
+        <label>Hf5000（3周循环）</label>
+        <div class="row">从第
+          <select id="select-c"></select> 周开始
         </div>
         <div class="row">固定搭配：
           <select id="select-e">
@@ -104,12 +111,12 @@
           </select>
         </div>
         <hr>
-        <label>F20（可自定义）</label>
-        <div class="row">工作日（1-7，逗号分隔）：
-          <input type="text" id="input-f20-days" value="1,5" />
-        </div>
-        <div class="row">标签文本：
+        <label>F20/F200</label>
+        <div class="row">电镜标签自选：
           <input type="text" id="input-f20-text" value="F20" />
+        </div>
+       <div class="row">工作日（多日用逗号分隔）：
+          <input type="text" id="input-f20-days" value="1,5" />
         </div>
         <button class="btn" id="save-rules">保存</button>
       </div>
